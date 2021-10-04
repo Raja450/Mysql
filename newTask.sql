@@ -45,7 +45,7 @@ insert into department('id', 'name','fk_country_id')
 values 
   (1,'CSE',1), 
   (2,'ME',2), 
-  (3,'Computer',2), 
+  (3,'Computer',4), 
   (4,'Science',3);
 
 

@@ -11,7 +11,7 @@ select
 from 
   hobby;
 /* Inset in hobby */
-insert into hobby('id',' hobby_Name') 
+insert into hobby('id', ' hobby_Name') 
 values 
   ('1', 'Cricket'), 
   ('2', 'Football'), 
@@ -33,8 +33,8 @@ CREATE TABLE 'employee' (
 );
 /* insert in emplyoyee*/
 insert into 'employee'(
-  'id', 'first_name', 'last_name', 'age', 'mobile_number', 
-  'address'
+  'id', 'first_name', 'last_name', 'age', 
+  'mobile_number', 'address'
 ) 
 values 
   (
@@ -67,12 +67,23 @@ CREATE TABLE 'employee_salary' (
   PRIMARY KEY ('id')
 );
 /* insert in employee_salary*/
-insert into 'employee_salary'('id', 'fk_employee_id', 'salary', 'date') 
+insert into 'employee_salary'(
+  'id', 'fk_employee_id', 'salary', 
+  'date'
+) 
 values 
-  ('1', '1', '15000.00', '2021-11-11'), 
-  ('2', '2', '10000.00', '2021-11-11'), 
-  ('3', '3', '12000.00', '2021-11-11'), 
-  ('4', '4', '16000.00', '2021-11-11');
+  (
+    '1', '1', '15000.00', '2021-11-11'
+  ), 
+  (
+    '2', '2', '10000.00', '2021-11-11'
+  ), 
+  (
+    '3', '3', '12000.00', '2021-11-11'
+  ), 
+  (
+    '4', '4', '16000.00', '2021-11-11'
+  );
 /*create table employee_hobby*/
 CREATE TABLE 'employee_hobby' (
   'id' int NOT NULL AUTO_INCREMENT, 
@@ -83,7 +94,9 @@ CREATE TABLE 'employee_hobby' (
   PRIMARY KEY ('id')
 );
 /*insert in employee_hobby*/
-insert into 'employee_hobby'('id', 'fk_employee_id', 'fk_hobby_id') 
+insert into 'employee_hobby'(
+  'id', 'fk_employee_id', 'fk_hobby_id'
+) 
 values 
   ('1', '2', '1');
 select 
@@ -166,42 +179,41 @@ from
   'employee_hobby';
 /*first query*/
 select 
-  employee.'first_name', 
-  employee.'last_name', 
+  e1.'first_name', 
+  e1.'last_name', 
   hobby.'hobby_Name' 
 from 
-  employee 
-  left join hobby on employee.'id' = hobby.'id' 
+  employee as e1 
+  left join hobby on e1.'id' = hobby.'id' 
 order by 
-  employee.'first_name', 
-  employee.'last_name';
+  e1.'first_name', 
+  e1.'last_name';
 /*2n query*/
 select 
-  employee.'first_name', 
-  employee.'last_name', 
-  employee_salary.'salary' 
+  e1.first_name, 
+  e1.last_name, 
+  e2.salary 
 from 
-  employee 
-  left join employee_salary on employee.'id' = employee_salary.'fk_employee_id' 
+  employee_salary as e2 
+  inner join employee as e1 on e1.id = e2.fk_employee_id 
 order by 
-  employee.'first_name', 
-  employee.'last_name';
+  e2.id;
 /*3rd query*/
-select 
-  employee.'first_name', 
-  employee.'last_name', 
+SELECT 
+  e.first_name as First_Name, 
+  e.last_name as First_Name, 
   (
-    select 
-      hobby.'hobby_Name' 
-    from 
-      employee_hobby 
-      left join hobby on hobby.'id' = employee_hobby.'fk_hobby_id' 
-    where 
-      employee_hobby.'fk_hobby_id' = employee.'id'
-  ) as hobby, 
-  sum('salary') as salary 
+    SELECT 
+      GROUP_CONCAT(h.hobby_Name) 
+    FROM 
+      employee_hobby as eh 
+      INNER JOIN hobby as h ON h.id = eh.fk_hobby_id 
+    WHERE 
+      h.id = eh.fk_hobby_id
+  ) AS hobby, 
+  SUM(salary) AS salary 
 FROM 
-  employee_salary 
-  left join employee on employee_salary.'fk_employee_id' = employee.'id' 
-group by 
-  employee.'id';
+  employee_salary as es 
+  INNER JOIN employee as e ON e.id = es.fk_employee_id 
+GROUP BY 
+  e.id;

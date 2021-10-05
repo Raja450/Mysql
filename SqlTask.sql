@@ -82,17 +82,17 @@ values
   );
 /*Get all job name and department name in single query*/
 SELECT 
-  job.name 
+  j1.name as Name 
 FROM 
-  job 
+  job as j1 
 UNION 
 SELECT 
-  department.name 
+  d1.name 
 FROM 
-  department;
+  department as d1;
 /* Get 2nd highest salary of the employee*/
 SELECT 
-  MAX(salary) 
+  MAX(salary) as 2nd_highest_salary 
 FROM 
   employee 
 WHERE 
@@ -104,15 +104,15 @@ WHERE
   );
 /* get name (firstname + lastname), department name, country name, job name*/
 SELECT 
-  employee.first_name, 
-  employee.last_name, 
-  department.name AS department_name, 
-  country.name AS country_name, 
-  job.name AS job_name 
+  e1.first_name AS First_Name, 
+  e1.last_name AS Last_Name, 
+  d1.name AS Department_Name, 
+  c1.name AS Country_Name, 
+  j1.name AS Job_Name 
 FROM 
-  employee 
-  INNER JOIN department ON department.id = employee.fk_department_id 
-  INNER JOIN country ON country.id = department.fk_country_id 
-  INNER JOIN job ON job.id = employee.fk_job_id 
+  employee As e1 
+  INNER JOIN department as d1 ON d1.id = e1.fk_department_id 
+  INNER JOIN country as c1 ON c1.id = d1.fk_country_id 
+  INNER JOIN job as j1 ON j1.id = e1.fk_job_id 
 ORDER BY 
-  employee.id;
+  e1.id;

@@ -198,6 +198,7 @@ from
   inner join employee e1 on e1.'id' = e2.'fk_employee_id' 
 order by 
   e2.'id';
+  /*Create a select query to get only employee name, employee_salary, hobby name with comma-separated(you need to use subquery for hobby name).*/
 SELECT 
   e.first_name First_Name, 
   e.last_name Last_Name, 

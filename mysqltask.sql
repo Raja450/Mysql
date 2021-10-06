@@ -177,43 +177,42 @@ select
   * 
 from 
   'employee_hobby';
-/*first query*/
+/*Create a select query to get only employee name, hobby_name*/
 select 
-  e1.'first_name', 
-  e1.'last_name', 
-  hobby.'hobby_Name' 
+  e.'first_name', 
+  e.'last_name', 
+  h.'hobby_Name' 
 from 
-  employee  e1 
-  left join hobby on e1.'id' = hobby.'id' 
+  employee_hobby eh 
+  INNER JOIN employee e ON e.'id' = eh.'fk_employee_id' 
+  inner join hobby h on h.'id' = eh.'fk_hobby_id' 
 order by 
-  e1.'first_name', 
-  e1.'last_name';
-/*2n query*/
+  e.'id' 
+  /*Create a select query to get only employee name, employee_salary*/
 select 
   e1.'first_name', 
   e1.'last_name', 
   e2.'salary' 
 from 
-  employee_salary  e2 
-  inner join employee  e1 on e1.id = e2.'fk_employee_id' 
+  employee_salary e2 
+  inner join employee e1 on e1.'id' = e2.'fk_employee_id' 
 order by 
   e2.'id';
-/*3rd query*/
 SELECT 
-  e.'first_name' First_Name, 
-  e.'last_name' First_Name, 
+  e.first_name First_Name, 
+  e.last_name Last_Name, 
   (
     SELECT 
-      GROUP_CONCAT(h.'hobby_Name') 
+      GROUP_CONCAT(h.hobby_Name) 
     FROM 
       employee_hobby eh 
-      INNER JOIN hobby h ON h.'id' = eh.'fk_hobby_id' 
+      INNER JOIN hobby h ON h.id = eh.fk_hobby_id 
     WHERE 
-      e.'id' = eh.'fk_hobby_id'
+      e.id = eh.fk_employee_id
   ) hobby, 
-  SUM('salary') salary 
+  SUM(salary) salary 
 FROM 
   employee_salary es 
-  INNER JOIN employee e ON e.'id' = es.'fk_employee_id' 
+  INNER JOIN employee e ON e.id = es.fk_employee_id 
 GROUP BY 
-  e.'id';
+  e.id;
